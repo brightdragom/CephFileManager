@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import config from "./config";
+import { Link } from "react-router-dom";
 
-const App = () => {
+const Home = () => {
   const [buckets, setBuckets] = useState([]);
   const [bucketItem, setBucketItem] = useState([]);
   const [downloadLinks, setDownloadLinks] = useState({});
@@ -81,6 +82,7 @@ const App = () => {
     setPreviewContent(fileHandlers[fileType] || fileHandlers.default);
     setCurrentPreviewItem(objName);
   };
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold text-center mb-6">Ceph File Manager</h1>
@@ -137,8 +139,11 @@ const App = () => {
           <div dangerouslySetInnerHTML={{ __html: previewContent }} />
         </div>
       )}
+      <nav>
+        <Link to="/">Adsfasdfadsfdaafdsfadsfadsfdasfdsafsadfasdfsafsapp</Link>
+      </nav>
     </div>
   );
 };
 
-export default App;
+export default Home;
