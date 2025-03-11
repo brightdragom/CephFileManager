@@ -67,9 +67,9 @@ const CreateBucketDialog = () => {
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           📂 Ceph File Manager
         </h1>
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <label className="block text-gray-700 font-semibold mb-2">
-            🔽 Now Bucket List:
+            🔽 Bucket List:
           </label>
           <ul>
             {buckets.map((bucket, index) => (
@@ -78,11 +78,33 @@ const CreateBucketDialog = () => {
               </li>
             ))}
           </ul>
+        </div> */}
+        <div className="mb-6">
+          <label className="block text-gray-800 font-bold text-lg mb-4 flex items-center">
+            <span className="mr-2">📂</span> Bucket List:
+          </label>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {buckets.map((bucket, index) => (
+              <li
+                key={index}
+                className="p-5 bg-white border border-gray-300 shadow-md rounded-xl flex flex-col items-center justify-center text-center space-y-3 hover:shadow-lg transition transform hover:scale-105 min-h-[120px]"
+              >
+                {/* 번호 태그 */}
+                <span className="absolute -top-3 bg-gradient-to-br from-blue-300 to-blue-500 text-white font-semibold text-xs w-7 h-7 flex items-center justify-center rounded-full border border-gray-100 shadow-md">
+                  {index + 1}
+                </span>
+                {/* 버킷 이름 */}
+                <span className="text-gray-900 font-medium text-sm break-words w-full">
+                  {bucket}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="mb-6">
           <label className="block text-gray-700 font-semibold mb-2">
-            📤 Input Bucket Name:
+            📤 Bucket Name:
           </label>
           <div className="relative w-full">
             <input

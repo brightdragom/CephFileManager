@@ -108,6 +108,13 @@ const Main = () => {
     return lastDotIndex !== -1 ? obj_name.substring(lastDotIndex).toLowerCase() : "";
   };
 
+  const handleClosePreview = async (objName) => {
+    if (currentPreviewItem === objName) {
+      setPreviewContent(null);
+      setCurrentPreviewItem(null);
+      return;
+    }
+  }
   // 파일 미리보기
   const handlePreview = async (bucket, objName) => {
     if (currentPreviewItem === objName) {
@@ -126,9 +133,6 @@ const Main = () => {
 
     if (textFileExtensions.includes(fileType)) {
       try {
-        // const response = await fetch(link);
-        // // const textContent = await response.text();
-        // const textContent = await response.body()
         const previewContent = new FormData();
         previewContent.append("bucket", bucket);
         previewContent.append("obj", objName);
@@ -140,7 +144,7 @@ const Main = () => {
         const data = await response.json();
         console.log(data)
         setPreviewContent(
-          `<pre class="w-full p-3 bg-gray-900 text-white text-sm rounded-lg overflow-auto max-h-60">${data.content}</pre>`
+          `<pre class="w-full p-3 bg-gray-900 text-white text-sm rounded-lg overflow-auto max-h-auto">${data.content}</pre>`
         );
         setCurrentPreviewItem(objName);
         return;
@@ -153,10 +157,11 @@ const Main = () => {
 
     const fileHandlers = {
       ".jpg": `<img src="${prevlink}" alt="${objName}" class="w-auto max-h-40 mx-auto" />`,
-      ".png": `<img src="${prevlink}" alt="${objName}" class="w-auto max-h-40 mx-auto" />`,
+      // ".png": `<img src="${prevlink}" alt="${objName}" class="w-auto max-h-40 mx-auto" />`,
+      ".png": `<img src="${prevlink}" alt="${objName}" class="w-auto max-h-auto mx-auto" />`,
       ".gif": `<img src="${prevlink}" alt="${objName}" class="w-auto max-h-40 mx-auto" />`,
       ".pdf": `<embed src="${prevlink}" type="application/pdf" class="w-auto h-40 mx-auto" />`,
-      ".mp4": `<video src="${prevlink}" controls class="w-auto h-40 mx-auto" />`,
+      ".mp4": `<video src="${prevlink}" controls class="w-auto h-auto mx-auto" />`,
       ".mov": `<video src="${prevlink}" controls class="w-auto h-40 mx-auto" />`,
       default: `Unsupported file type: ${fileType}`,
     };
@@ -173,112 +178,85 @@ const Main = () => {
   };
 
   return (
-    <div className="flex justify-center h-auto ">
+    <div className="container mx-auto flex justify-center  h-auto m-6 space-x-6">
       {/* 왼쪽 사이드바 */}
-      <div className="w-64 bg-sky-300 text-white p-6 flex flex-col space-y-4 ml-auto shadow-lg rounded-lg">
+      <div className="w-64 bg-sky-300 text-white p-6 flex flex-col space-y-4 shadow-lg rounded-lg min-h-[500px]">
         <h1 className="text-2xl font-bold">📁 Menu</h1>
         <nav className="flex flex-col space-y-2">
-          <Link to="/" className="p-3 rounded-lg hover:bg-gray-600 transition">
-            🏠 Home
-          </Link>
-          <button
-            onClick={openUploadDialog}
-            className="p-3 rounded-lg hover:bg-yellow-600 transition text-left"
-          >
-            📤 Add Object
-          </button>
-          <button
-            onClick={openCreateBucketDialog}
-            className="p-3 rounded-lg hover:bg-green-600 transition text-left"
-          >
-            🆕 Create Bucket
-          </button>
-
-          <button
-              onClick={openDeleteBucketDialog}
-              className="p-3 rounded-lg hover:bg-red-600 transition text-left"
-            >
-              ⚠️🗑️ Delete Bucket 💣🔥
-            </button>
+          <Link to="/" className="p-3 rounded-lg hover:bg-gray-600 transition">🏠 Home</Link>
+          <button onClick={openUploadDialog} className="p-3 rounded-lg hover:bg-yellow-600 transition text-left">📤 Add Object</button>
+          <button onClick={openCreateBucketDialog} className="p-3 rounded-lg hover:bg-green-600 transition text-left">🆕 Create Bucket</button>
+          <button onClick={openDeleteBucketDialog} className="p-3 rounded-lg hover:bg-red-600 transition text-left">⚠️ Delete Bucket 🔥</button>
         </nav>
       </div>
 
-      {/* 메인 콘텐츠 영역 */}
-      <div className="p-6 max-w-4xl mr-auto bg-white shadow-lg rounded-lg ">
-        {/* 버킷 목록 */}
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">Buckets:</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {buckets.map((bucketlist, index) => (
-            <div
-              key={index}
-              onClick={() => toggleBucketList(bucketlist)}
-              className="cursor-pointer p-4 bg-gray-100 border rounded-lg shadow-sm hover:shadow-md hover:bg-gray-200 transition-all"
-            >
-              <p className="text-blue-600 font-semibold text-lg text-center">
-                {bucketlist}
-              </p>
+      {/* 메인 콘텐츠 + 미리보기 */}
+      <div className="flex flex-1 space-x-6 items-stretch">
+        {/* 메인 콘텐츠 영역 */}
+        <div className="p-6 w-full max-w-5xl bg-white shadow-lg rounded-lg flex-1 min-h-[500px]">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700">Buckets:</h2>
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-6">
+            {buckets.map((bucketlist, index) => (
+              <div key={index} onClick={() => toggleBucketList(bucketlist)}
+                className={`cursor-pointer p-4 border rounded-lg shadow-sm transition-all 
+                  ${selectedBucket === bucketlist ? "bg-blue-100 border-blue-500" : "bg-gray-100 hover:bg-gray-200"}`}>
+                <p className="text-blue-600 font-semibold text-lg text-center">{bucketlist}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* 선택된 버킷의 아이템 목록 */}
+          {selectedBucket && (
+            <div className="border rounded-lg p-5 bg-gray-50 mt-6 shadow-md">
+              <h2 className="text-lg font-semibold mb-4 text-gray-800">Items in "{selectedBucket}":</h2>
+              <ul className="divide-y divide-gray-300">
+                {bucketItem
+                  .filter((items) => items.bucket === selectedBucket)
+                  .map((items, index) => (
+                    <li key={index} className="py-3 px-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">{items.name}</p>
+                          <p className="text-xs text-gray-500">{items.modified}</p>
+                          <p className="text-xs font-medium text-gray-700">{items.size} Bytes</p>
+                        </div>
+                        {/* 버튼 그룹 */}
+                        <div className="flex space-x-2">
+                          <button onClick={() => handleFetchDownloadLink(items.bucket, items.name)}
+                            className="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-lg shadow hover:bg-green-600 transition">
+                            Download
+                          </button>
+                          <button onClick={() => handlePreview(items.bucket, items.name)}
+                            className={`px-3 py-1 rounded-lg text-sm font-medium shadow transition ${
+                              currentPreviewItem === items.name
+                                ? "bg-red-500 hover:bg-red-600 text-white"
+                                : "bg-blue-500 hover:bg-blue-600 text-white"
+                            }`}>
+                            {currentPreviewItem === items.name ? "Hide Preview" : "Show Preview"}
+                          </button>
+                          <button onClick={() => handelObjDelete(items.bucket, items.name)}
+                            className="px-3 py-1 bg-red-500 text-white text-sm font-medium rounded-lg shadow hover:bg-gray-600 transition">
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
             </div>
-          ))}
+          )}
         </div>
 
-        {/* 선택된 버킷의 아이템 목록 */}
-        {selectedBucket && (
-          <div className="border rounded-lg p-5 bg-gray-50 mt-6 shadow-md">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">
-              Items in "{selectedBucket}":
-            </h2>
-            <ul className="divide-y divide-gray-300">
-              {bucketItem
-                .filter((items) => items.bucket === selectedBucket)
-                .map((items, index) => (
-                  <li
-                    key={index}
-                    className="py-3 px-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-semibold text-gray-900">{items.name}</p>
-                        <p className="text-xs text-gray-500">{items.modified}</p>
-                        <p className="text-xs font-medium text-gray-700">
-                          {items.size} Bytes
-                        </p>
-                      </div>
-                      {/* 버튼 그룹 */}
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => handleFetchDownloadLink(items.bucket, items.name)}
-                          className="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-lg shadow hover:bg-green-600 transition"
-                        >
-                          Download
-                        </button>
-                        <button
-                          onClick={() => handlePreview(items.bucket, items.name)}
-                          className={`px-3 py-1 rounded-lg text-sm font-medium shadow transition ${
-                            currentPreviewItem === items.name
-                              ? "bg-red-500 hover:bg-red-600 text-white"
-                              : "bg-blue-500 hover:bg-blue-600 text-white"
-                          }`}
-                        >
-                          {currentPreviewItem === items.name ? "Hide Preview" : "Show Preview"}
-                        </button>
-                        <button
-                          onClick={() => handelObjDelete(items.bucket, items.name)}
-                          className="px-3 py-1 bg-green-500 text-white text-sm font-medium rounded-lg shadow hover:bg-gray-600 transition"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        )}
-
-        {/* 미리보기 공간 */}
+        {/* ✅ 개선된 미리보기 위치 및 크기 */}
         {previewContent && (
-          <div className="mt-6 border p-5 rounded-lg bg-white shadow-lg">
-            <h3 className="font-semibold mb-3 text-gray-800">{currentPreviewItem}</h3>
+          <div className="absolute right-0 top-0 w-[650px] h-full border p-5 rounded-lg bg-white shadow-lg overflow-auto min-h-[500px]">
+            <button
+              onClick={() => handleClosePreview(currentPreviewItem)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
+            >
+              ✖
+            </button>
+            <h3 className="font-semibold mb-3 text-gray-800 text-center">{currentPreviewItem}</h3>
             <div className="p-3 bg-gray-100 rounded-md" dangerouslySetInnerHTML={{ __html: previewContent }} />
           </div>
         )}

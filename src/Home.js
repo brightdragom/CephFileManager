@@ -22,9 +22,9 @@ const Home = () => {
             <Link to="/Main">
             <div
               // onClick={() => setActiveMenu("viewBuckets")}
-              className="w-full text-left p-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
+              className="w-full text-left p-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition text-center"
             >
-               📂 View Buckets
+               🗑️ View Buckets
             </div>
             </Link>
           </li>
@@ -34,7 +34,7 @@ const Home = () => {
             <button
               // onClick={() => setActiveMenu("createBucket")}
               onClick={openCreateBucketDialog}
-              className="w-full text-left p-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition"
+              className="w-full text-left p-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition text-center"
             >
               🆕 Create Bucket
             </button>
@@ -44,9 +44,9 @@ const Home = () => {
           <li>
             <button
               onClick={openUploadDialog}
-              className="w-full text-left p-4 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition"
+              className="w-full text-left p-4 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition text-center"
             >
-              📤 Add Object
+              📤 Add Object 
             </button>
           </li>
 
@@ -54,7 +54,7 @@ const Home = () => {
           <li>
             <button
               onClick={openDeleteBucketDialog}
-              className="w-full text-left p-4 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition"
+              className="w-full text-left p-4 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition text-center"
             >
               ⚠️☠️🗑️ Delete Bucket 💣☠️🔥
             </button>
