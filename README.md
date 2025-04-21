@@ -17,6 +17,12 @@ Ceph File Manager is a React-based web application that allows users to interact
  ┣ 📂 src
  ┃ ┣ 📜 App.js         # Main React component
  ┃ ┣ 📜 index.js       # React app entry point
+ ┃ ┣ 📜 CreateBucket.js
+ ┃ ┣ 📜 DeleteBucket.js
+ ┃ ┣ 📜 DialogContext.js
+ ┃ ┣ 📜 UploadDialog.js
+ ┃ ┣ 📜 Home.js
+ ┃ ┣ 📜 Main.js
  ┣ 📜 package.json     # Project dependencies
  ┣ 📜 README.md        # Documentation
  ┗ 📜 .env             # Environment variables (optional)

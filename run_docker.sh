@@ -57,4 +57,4 @@ else
 fi
 
 docker build --no-cache -t $imgName:$imgTag -f Dockerfile .
-docker run -it --rm -p $externalPort:$targetPort --name $imgName $imgName:$imgTag
+docker run -it --rm -d -p $externalPort:$targetPort --name $imgName $imgName:$imgTag

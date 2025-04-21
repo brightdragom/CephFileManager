@@ -5,11 +5,11 @@ import { useDialog } from "./DialogContext"; // 다이얼로그 컨텍스트 사
 const Home = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   // const { isUploadDialogOpen } = useDialog();
-  const { openUploadDialog, openCreateBucketDialog, openDeleteBucketDialog } = useDialog();
+  const { openUploadDialog, openCreateBucketDialog, openDeleteBucketDialog, openSetupS3ApiEnvDialog } = useDialog();
 
 
   return (
-    <div className="h-screen flex justify-center items-center bg-gray-100">
+    <div className="h-screen flex justify-center items-center bg-gray-100 ">
       <div className="w-96 p-6 bg-white shadow-xl rounded-lg">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Ceph Storage Manager
@@ -59,18 +59,14 @@ const Home = () => {
               ⚠️☠️🗑️ Delete Bucket 💣☠️🔥
             </button>
           </li>
-
-          {/* 🔹 홈으로 돌아가기 */}
-          {activeMenu && (
-            <li>
-              <button
-                onClick={() => setActiveMenu(null)}
-                className="w-full text-left p-4 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600 transition"
-              >
-                🔙 Back to Menu
-              </button>
-            </li>
-          )}
+          <li>
+            <div
+              onClick={openSetupS3ApiEnvDialog}
+              className="w-full text-left p-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition text-center"
+            >
+               Setup S3 API
+            </div>
+          </li>
         </ul>
 
         {/* 🔹 선택된 메뉴에 따라 UI 변경 */}
@@ -78,6 +74,7 @@ const Home = () => {
           {activeMenu === "viewBuckets" && <ViewBuckets />}
           {activeMenu === "createBucket" && <CreateBucket />}
           {activeMenu === "addObject" && <AddObject />}
+          {activeMenu === "setupS3API" && <SetupS3API />}
         </div>
       </div>
     </div>
@@ -113,5 +110,13 @@ const AddObject = () => {
     </div>
   );
 };
-
+/* 🔹 Object 추가 컴포넌트 */
+const SetupS3API = () => {
+  return (
+    <div className="p-4 bg-gray-50 rounded-lg shadow-inner">
+      <h2 className="text-lg font-semibold text-gray-800">📤 Setup S3 API Env</h2>
+      {/* <p className="text-sm text-gray-600">Select a bucket and upload files.</p> */}
+    </div>
+  );
+};
 export default Home;

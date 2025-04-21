@@ -11,6 +11,8 @@ import NotFound from "./NotFound";
 import { DialogProvider } from "./DialogContext"; // Dialog 상태 제공
 import CreateBucketDialog from "./CreateBucket";
 import DeleteBucketDialog from "./DeleteBucket";
+import WebRTCVideoStream from "./WebRTCVideoStream";
+import SetNewS3ApiEnv from "./SetNewS3ApiEnv";
 
 const App = () => {
   return(
@@ -23,6 +25,8 @@ const App = () => {
           <Route path="/uploadDialog" element={<UploadDialog />} />
           <Route path="/createBucketDialog" element={<CreateBucketDialog />} />
           <Route path="/deleteBucketDialog" element={<DeleteBucketDialog />} />
+          <Route path="/webRTCVideoStream" element={<WebRTCVideoStream />} />
+          <Route path="/setNewS3ApiEnv" element={<SetNewS3ApiEnv />} />
           {/* 존재하지 않는 경로 처리 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
